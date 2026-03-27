@@ -77,7 +77,7 @@ function updateUI() {
         } else if (card.type === 'hunter') {
             cardElement.classList.add('hunter');
             // 添加失控·001的背景图片
-            cardElement.style.backgroundImage = `url('美术资产/experiment_001_card_v3.png.jpeg')`;
+            cardElement.style.backgroundImage = `url('assets/images/experiment_001_card_v3.png.jpeg')`;
             cardElement.style.backgroundSize = 'cover';
             cardElement.style.backgroundPosition = 'center';
             cardElement.style.color = 'white'; // 确保文字清晰可见
@@ -193,7 +193,7 @@ function updateUI() {
             } else if (card.type === 'hunter') {
                 cardElement.classList.add('hunter');
                 // 添加失控·001的背景图片
-                cardElement.style.backgroundImage = `url('美术资产/experiment_001_card_v3.png.jpeg')`;
+                cardElement.style.backgroundImage = `url('assets/images/experiment_001_card_v3.png.jpeg')`;
                 cardElement.style.backgroundSize = 'cover';
                 cardElement.style.backgroundPosition = 'center';
                 cardElement.style.color = 'white'; // 确保文字清晰可见
