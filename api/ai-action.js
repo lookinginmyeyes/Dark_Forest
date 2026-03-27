@@ -107,8 +107,10 @@ function buildMessage(action, data) {
 }
 
 module.exports = async function handler(req, res) {
+    if (!req.body) return res.status(400).json({ error: 'missing body' });
     const { action, data, mode } = req.body;
     if (!action || !data) return res.status(400).json({ error: 'missing action or data' });
+    if (!BASE_URL || !API_KEY) return res.status(500).json({ error: 'env vars not configured: DOUBAO_BASE_URL or DOUBAO_AUTH_TOKEN missing' });
 
     const userMessage = buildMessage(action, data);
 
