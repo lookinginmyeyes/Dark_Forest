@@ -139,7 +139,7 @@ module.exports = async function handler(req, res) {
         
         // 两种模式都使用 OpenAI 兼容格式
         // 极速模式使用推理模型（DeepSeek-R1系列），推理token会占用max_tokens，需要更大的配额
-        const maxTokens = mode === 'fast' ? 8000 : 1500;
+        const maxTokens = mode === 'fast' ? 8000 : 4000;
         const requestBody = {
             model: selectedModel,
             max_tokens: maxTokens,
@@ -151,8 +151,11 @@ module.exports = async function handler(req, res) {
         
         console.log('Request Body:', JSON.stringify(requestBody));
         
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
         const response = await fetch(selectedURL, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${selectedKey}`
@@ -170,6 +173,7 @@ module.exports = async function handler(req, res) {
         }
 
         const json = await response.json();
+        clearTimeout(timeoutId);
         const msg = json.choices?.[0]?.message || {};
         // DeepSeek R1 系列把思考过程放在 reasoning_content，最终答案在 content
         // 若 content 为空则回退到 reasoning_content
