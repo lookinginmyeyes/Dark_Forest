@@ -1,0 +1,14 @@
+{
+  "name": "abyss-game-server",
+  "version": "1.0.0",
+  "description": "代号：深渊 AI对战后端服务",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

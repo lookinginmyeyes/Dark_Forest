@@ -1,0 +1,1093 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #f0f0f0;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* 顶部信息栏 */
+.info-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.info-left {
+    display: flex;
+    gap: 30px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.info-item .label {
+    color: #8a2be2;
+    font-weight: bold;
+}
+
+.info-item .value {
+    color: #f0f0f0;
+}
+
+/* 游戏主容器 */
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
+    position: relative;
+}
+
+/* 玩家1卡牌区域（上方） */
+.player1-cards {
+    flex: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5px 10px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(138, 43, 226, 0.1) 0%, transparent 100%);
+    overflow-x: visible;
+}
+
+/* 中间信息区域 */
+.middle-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    background: linear-gradient(180deg, transparent 0%, rgba(138, 43, 226, 0.05) 50%, transparent 100%);
+}
+
+/* 指挥盘面样式 */
+.command-console {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 15px;
+    padding: 30px;
+    width: 640px;
+    height: 360px;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 控制台背景图片样式 */
+.command-console img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* 控制台网格背景 */
+.command-console::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 控制台边框发光效果 */
+.command-console::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8a2be2, #4ecdc4, #8a2be2, #4ecdc4);
+    background-size: 400% 400%;
+    border-radius: 17px;
+    z-index: -1;
+    animation: borderGlow 4s ease infinite;
+}
+
+/* 信息内容 */
+.info-content {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-content h3 {
+    color: #00ffff;
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.info-content p {
+    color: #f0f0f0;
+    margin: 5px 0;
+    font-size: 16px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+    }
+    100% {
+        text-shadow: 0 0 15px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8), 0 0 45px rgba(0, 255, 255, 0.5);
+    }
+}
+
+/* 控制台标题 */
+.console-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+    letter-spacing: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 边框发光动画 */
+@keyframes borderGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 玩家2卡牌区域（下方） */
+.player2-cards {
+    flex: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 5px 10px;
+    position: relative;
+    background: linear-gradient(0deg, rgba(78, 205, 196, 0.1) 0%, transparent 100%);
+    overflow-x: visible;
+}
+
+/* 卡牌容器 - 水平排列 */
+.cards-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+}
+
+/* 卡牌样式 */
+.card {
+    width: 100px;
+    height: 140px;
+    background: linear-gradient(135deg, #2a2a3a 0%, #3a3a4a 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid rgba(138, 43, 226, 0.3);
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.1);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* 卡牌容器，用于容纳卡牌和文字 */
+.card-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 上方卡牌（玩家1）- 文字和序号在卡牌下方，水平排列 */
+.player1-cards .card-container {
+    flex-direction: column;
+}
+
+/* 下方卡牌（玩家2）- 文字和序号在卡牌上方，水平排列 */
+.player2-cards .card-container {
+    flex-direction: column-reverse;
+}
+
+/* 文字和序号的容器 */
+.card-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0;
+    gap: 8px;
+}
+
+/* 卡牌文字 */
+.card-text {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
+}
+
+/* 卡牌序号 */
+.card-id {
+    font-size: 10px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+    order: -1; /* 将序号放在文字左侧 */
+}
+
+/* 暴露标记样式 */
+.exposed-mark {
+    font-size: 14px;
+    animation: pulse 2s infinite;
+    margin-left: 4px;
+}
+
+/* 暴露卡牌的特效 */
+.card.inspected {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+    border-color: rgba(255, 255, 0, 0.8);
+    animation: glow 2s infinite alternate;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 发光动画 */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+    }
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.6);
+}
+
+/* 上方卡牌悬停效果 - 向下移动 */
+.player1-cards .card:hover {
+    transform: translateY(8px) scale(1.05);
+    box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.6);
+}
+
+/* 下方卡牌悬停效果 - 向上移动 */
+.player2-cards .card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.6);
+}
+
+/* 卡牌类型样式 */
+.card.killer {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+}
+
+.card.doctor {
+    background: linear-gradient(135deg, #4ecdc4 0%, #45b7d1 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+}
+
+.card.guard {
+    background: linear-gradient(135deg, #45b7d1 0%, #2196f3 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(69, 183, 209, 0.3);
+}
+
+.card.hunter {
+    background: linear-gradient(135deg, #f9ca24 0%, #f093fb 100%);
+    color: #333;
+    box-shadow: 0 0 15px rgba(249, 202, 36, 0.3);
+}
+
+.card.prophet {
+    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(162, 155, 254, 0.3);
+}
+
+.card.normal {
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(149, 165, 166, 0.3);
+}
+
+.card.unknown {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.2);
+}
+
+.card.eliminated {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 0, 0, 0.2) 100%);
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.card.guarded {
+    border: 2px solid #4ecdc4;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+    animation: guardPulse 2s ease-in-out infinite;
+}
+
+.card.inspected {
+    border: 2px solid #4ecdc4;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+/* 被消除标记 */
+.eliminated-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    font-size: 30px;
+    font-weight: bold;
+    color: rgba(255, 0, 0, 0.8);
+    pointer-events: none;
+    z-index: 10;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    animation: markPulse 2s ease-in-out infinite;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(138, 43, 226, 0.8);
+    }
+}
+
+@keyframes guardPulse {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(78, 205, 196, 0.8);
+    }
+}
+
+@keyframes markPulse {
+    0%, 100% {
+        text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(255, 0, 0, 0.9);
+    }
+}
+
+/* 交互面板 */
+.interaction-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 15px;
+    padding: 30px;
+    min-width: 300px;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+}
+
+.interaction-panel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #8a2be2, #ff6b6b);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 4s ease infinite;
+}
+
+.interaction-content {
+    margin-top: 15px;
+}
+
+.interaction-content p {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.interaction-content button {
+    padding: 12px 24px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2) 0%, rgba(0, 200, 200, 0.3) 100%);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    border-color: rgba(0, 255, 255, 0.8);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, rgba(100, 100, 120, 0.3) 0%, rgba(80, 80, 100, 0.4) 100%);
+    color: #aabbcc;
+    border: 1px solid rgba(150, 150, 170, 0.3);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(100, 100, 120, 0.3);
+    color: #ccddee;
+}
+
+/* 标题渐变动画 */
+@keyframes titleGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .card {
+        width: 90px;
+        height: 126px;
+        font-size: 13px;
+    }
+    
+    .cards-row {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 900px) {
+    .card {
+        width: 75px;
+        height: 105px;
+        font-size: 12px;
+    }
+    
+    .cards-row {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .info-bar {
+        height: 40px;
+        padding: 0 15px;
+    }
+    
+    .info-left {
+        gap: 15px;
+    }
+    
+    .info-item {
+        font-size: 12px;
+    }
+    
+    .game-container {
+        padding-top: 40px;
+    }
+    
+    .card {
+        width: 65px;
+        height: 91px;
+        font-size: 11px;
+    }
+    
+    .cards-row {
+        gap: 6px;
+    }
+}
+
+/* 控制按钮样式 */
+.control-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, #8a2be2 0%, #9400d3 100%);
+    color: white;
+}
+
+.control-btn.secondary {
+    background: linear-gradient(135deg, #4ecdc4 0%, #45b7d1 100%);
+    color: white;
+}
+
+.control-btn.info {
+    background: linear-gradient(135deg, #f9ca24 0%, #f093fb 100%);
+    color: #333;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+}
+
+/* 游戏日志面板 */
+.game-log-panel {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.game-log-panel h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #8a2be2, #ff6b6b);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 4s ease infinite;
+}
+
+#game-log-content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#game-log-content p {
+    margin: 8px 0;
+    padding: 8px;
+    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+    font-size: 13px;
+}
+
+/* 结果消息样式 */
+.result-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.2);
+}
+
+.result-message.win {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(69, 183, 209, 0.1) 100%);
+    border: 1px solid rgba(78, 205, 196, 0.2);
+    box-shadow: 0 0 30px rgba(78, 205, 196, 0.2);
+    color: #4ecdc4;
+}
+
+.result-message.lose {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 111, 0.1) 100%);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+}
+
+/* 开场动画样式 */
+.intro-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.split-screen {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.night-side {
+    flex: 1;
+    background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: nightPulse 3s ease-in-out infinite;
+}
+
+.day-side {
+    flex: 1;
+    background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: dayPulse 3s ease-in-out infinite;
+}
+
+.night-side h1 {
+    color: #8a2be2;
+    font-size: 48px;
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+    margin-bottom: 30px;
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.day-side h1 {
+    color: #8b4513;
+    font-size: 48px;
+    text-shadow: 0 0 20px rgba(139, 69, 19, 0.6);
+    margin-bottom: 30px;
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+.wolf-icon {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.8) 0%, rgba(75, 0, 130, 0.8) 100%);
+    border-radius: 50%;
+    position: relative;
+    animation: wolfHowl 4s ease-in-out infinite;
+}
+
+.wolf-icon::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 90px;
+    height: 90px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.village-icon {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255, 235, 205, 0.8) 0%, rgba(255, 192, 203, 0.8) 100%);
+    border-radius: 50%;
+    position: relative;
+    animation: villageGlow 4s ease-in-out infinite;
+}
+
+.village-icon::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 30px;
+    width: 90px;
+    height: 70px;
+    background: #8b4513;
+    border-radius: 10px 10px 0 0;
+}
+
+.game-title {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.game-title h2 {
+    font-size: 64px;
+    background: linear-gradient(90deg, #8a2be2, #ff6b6b, #4ecdc4, #45b7d1);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 4s ease infinite, titleFloat 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+}
+
+.start-button-container {
+    margin-top: 20px;
+}
+
+.start-button {
+    padding: 20px 60px;
+    font-size: 24px;
+    background: linear-gradient(135deg, #8a2be2, #9400d3);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+    animation: buttonGlow 2s ease-in-out infinite alternate;
+}
+
+.start-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.8);
+}
+
+/* 游戏教程模态框样式 */
+.tutorial-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.95) 0%, rgba(26, 26, 42, 0.95) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.tutorial-content-wrapper {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #f0f0f0;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+}
+
+.tutorial-content-wrapper h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, #8a2be2, #ff6b6b);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 4s ease infinite;
+    font-size: 28px;
+    text-align: center;
+}
+
+.tutorial-steps {
+    margin-bottom: 40px;
+}
+
+.tutorial-step {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, rgba(75, 0, 130, 0.05) 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+.step-number {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #8a2be2 0%, #9400d3 100%);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+.tutorial-step h3 {
+    display: inline-block;
+    margin: 0 0 15px 0;
+    background: linear-gradient(90deg, #4ecdc4, #45b7d1);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 4s ease infinite;
+    font-size: 18px;
+}
+
+.tutorial-step p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.tutorial-step ul {
+    margin: 15px 0 10px 20px;
+}
+
+.tutorial-step li {
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.card-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.card-type-item {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-type-item.killer {
+    background: linear-gradient(135deg, rgba(255, 99, 132, 0.2) 0%, rgba(255, 159, 64, 0.2) 100%);
+    border-color: rgba(255, 99, 132, 0.3);
+}
+
+.card-type-item.doctor {
+    background: linear-gradient(135deg, rgba(75, 192, 192, 0.2) 0%, rgba(54, 162, 235, 0.2) 100%);
+    border-color: rgba(75, 192, 192, 0.3);
+}
+
+.card-type-item.guard {
+    background: linear-gradient(135deg, rgba(54, 162, 235, 0.2) 0%, rgba(153, 102, 255, 0.2) 100%);
+    border-color: rgba(54, 162, 235, 0.3);
+}
+
+.card-type-item.hunter {
+    background: linear-gradient(135deg, rgba(255, 159, 64, 0.2) 0%, rgba(255, 205, 86, 0.2) 100%);
+    border-color: rgba(255, 159, 64, 0.3);
+}
+
+.card-type-item.prophet {
+    background: linear-gradient(135deg, rgba(153, 102, 255, 0.2) 0%, rgba(255, 99, 132, 0.2) 100%);
+    border-color: rgba(153, 102, 255, 0.3);
+}
+
+.card-type-item.normal {
+    background: linear-gradient(135deg, rgba(169, 169, 169, 0.2) 0%, rgba(200, 200, 200, 0.2) 100%);
+    border-color: rgba(169, 169, 169, 0.3);
+}
+
+.card-type-name {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-type-desc {
+    display: block;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+#tutorial-start-game {
+    display: block;
+    margin: 0 auto;
+    padding: 15px 40px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #8a2be2 0%, #9400d3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+    transition: all 0.3s ease;
+}
+
+#tutorial-start-game:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+}
+
+/* 动画效果 */
+@keyframes nightPulse {
+    0%, 100% {
+        background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2a 100%);
+    }
+    50% {
+        background: linear-gradient(180deg, #1a1a2a 0%, #2a2a3a 100%);
+    }
+}
+
+@keyframes dayPulse {
+    0%, 100% {
+        background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+    }
+    50% {
+        background: linear-gradient(180deg, #fcb69f 0%, #ffecd2 100%);
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+    }
+    100% {
+        text-shadow: 0 0 30px rgba(138, 43, 226, 1), 0 0 40px rgba(138, 43, 226, 0.8);
+    }
+}
+
+@keyframes wolfHowl {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes villageGlow {
+    0%, 100% {
+        box-shadow: 0 0 30px rgba(255, 235, 205, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(255, 235, 205, 0.8);
+    }
+}
+
+@keyframes titleFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes buttonGlow {
+    0% {
+        box-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 50px rgba(138, 43, 226, 0.8);
+    }
+}
+
+/* 闪烁动画 */
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 消失动画 */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+.fade-out {
+    animation: fadeOut 1s ease forwards;
+}

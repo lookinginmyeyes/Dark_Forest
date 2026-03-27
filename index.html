@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑暗森林</title>
+
+    <!-- 音效 -->
+    <audio id="skill-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magical-arcane-shimmer-1672.mp3" type="audio/mpeg">
+     </audio>
+    <audio id="guard-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-spell-book-page-flip-1466.mp3" type="audio/mpeg">
+     </audio>
+    <audio id="attack-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-quick-sword-whoosh-1712.mp3" type="audio/mpeg">
+     </audio>
+    <audio id="eliminate-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-ominous-horror-hit-2756.mp3" type="audio/mpeg">
+     </audio>
+
+    <link rel="stylesheet" href="css/straight-style.css">
+</head>
+<body>
+
+    <!-- 开场动画 -->
+    <div class="intro-animation" id="intro-animation">
+        <div class="split-screen">
+            <div class="night-side">
+                <h1>文明·智域</h1>
+                <div class="wolf-icon"></div>
+            </div>
+            <div class="day-side">
+                <h1>文明·人联</h1>
+                <div class="village-icon"></div>
+            </div>
+        </div>
+        <div class="game-title">
+            <h2>黑暗森林</h2>
+        </div>
+        <div class="start-button-container">
+            <button class="start-button" id="intro-start-button">开始游戏</button>
+        </div>
+    </div>
+
+    <!-- 游戏教程模态框 -->
+    <div class="tutorial-modal" id="game-tutorial-modal" style="display:none;">
+        <div class="tutorial-content-wrapper">
+            <h2>游戏教程 · 黑暗森林</h2>
+            <div class="tutorial-steps">
+                <div class="tutorial-step">
+                    <span class="step-number">1</span>
+                    <h3>游戏背景</h3>
+                    <p>2157年，两大文明在宇宙中相遇。<strong>文明·人联</strong>（你方）与<strong>文明·智域</strong>（AI方）在黑暗森林法则的支配下，展开了一场生存博弈。</p>
+                </div>
+                <div class="tutorial-step">
+                    <span class="step-number">2</span>
+                    <h3>特工类型</h3>
+                    <div class="card-types">
+                        <div class="card-type-item killer">
+                            <span class="card-type-name">清除者</span>
+                            <span class="card-type-desc">核心战力，消灭对方赢得胜利</span>
+                        </div>
+                        <div class="card-type-item doctor">
+                            <span class="card-type-name">重组师</span>
+                            <span class="card-type-desc">一次性抵消一次攻击</span>
+                        </div>
+                        <div class="card-type-item guard">
+                            <span class="card-type-name">护盾官</span>
+                            <span class="card-type-desc">每回合守护一张己方卡牌</span>
+                        </div>
+                        <div class="card-type-item hunter">
+                            <span class="card-type-name">失控·001</span>
+                            <span class="card-type-desc">被消除时触发额外攻击回合</span>
+                        </div>
+                        <div class="card-type-item prophet">
+                            <span class="card-type-name">先知</span>
+                            <span class="card-type-desc">每回合查验一张对方卡牌身份</span>
+                        </div>
+                        <div class="card-type-item normal">
+                            <span class="card-type-name">研究员</span>
+                            <span class="card-type-desc">无特殊能力的普通成员</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <span class="step-number">3</span>
+                    <h3>回合流程</h3>
+                    <ul>
+                        <li>【先知回合】查验对方一张卡牌，获取身份情报</li>
+                        <li>【护盾回合】选择一张己方卡牌进行守护，使其免疫本回合攻击</li>
+                        <li>【攻击回合】选择对方一张卡牌发动攻击，将其消除</li>
+                    </ul>
+                </div>
+                <div class="tutorial-step">
+                    <span class="step-number">4</span>
+                    <h3>胜利条件</h3>
+                    <ul>
+                        <li>消灭对方所有<strong>清除者</strong>，即可获胜</li>
+                        <li>或消灭对方所有<strong>研究员</strong>，亦可获胜</li>
+                        <li>或消灭对方所有<strong>功能卡</strong>（重组师/护盾官/失控·001/先知），亦可获胜</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <button class="start-button" id="tutorial-start-game">进入战场</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 顶部信息栏 -->
+    <div class="info-bar">
+        <div class="info-left">
+            <div class="info-item">
+                <span class="label">当前回合：</span>
+                <span class="value" id="current-turn">初始化中</span>
+            </div>
+            <div class="info-item">
+                <span class="label">回合数：</span>
+                <span class="value" id="round-count">0</span>
+            </div>
+            <div class="info-item">
+                <span class="label">游戏状态：</span>
+                <span class="value" id="game-status">准备中</span>
+            </div>
+        </div>
+        <div class="info-right">
+            <button id="show-log" class="control-btn info" onclick="toggleGameLog()">战报</button>
+            <button id="show-ai-thinking" class="control-btn info" onclick="toggleAIThinkingLog()">AI思考</button>
+            <button id="toggle-ai-mode" class="control-btn info" onclick="toggleAIMode()">极速模式</button>
+        </div>
+    </div>
+
+    <!-- 主游戏界面 -->
+    <div class="game-container" style="display:none;">
+        <!-- 玩家2（AI）卡牌区域（上方） -->
+        <div class="player1-cards" id="player2-area">
+            <div class="cards-row" id="player2-cards"></div>
+        </div>
+
+        <!-- 中间信息区域 -->
+        <div class="middle-info">
+            <div class="command-console">
+                <img src="美术资产/digital_display.png.jpeg" alt="指挥控制台背景">
+                <div class="console-title">指挥中枢</div>
+                <div class="info-content">
+                    <h3 id="interaction-content">等待指令...</h3>
+                    <!-- 与原版 card-battle 一致：结算文案由 checkGameEnd 写入 -->
+                    <div id="result-message" class="result-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 玩家1（玩家）卡牌区域（下方） -->
+        <div class="player2-cards" id="player1-area">
+            <div class="cards-row" id="player1-cards"></div>
+        </div>
+
+        <!-- 交互面板 -->
+        <div class="interaction-panel" id="interaction-panel" style="display: none;">
+            <h2>指令中心</h2>
+            <div id="interaction-content">等待指令...</div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="control-panel" style="position: absolute; bottom: 20px; right: 20px; z-index: 1000;">
+            <button id="start-game" class="btn btn-primary">新游戏</button>
+            <button id="reset-game" class="btn btn-secondary">重置</button>
+        </div>
+
+        <!-- 游戏日志 -->
+        <div class="game-log-panel" id="game-log-panel" style="display:none;">
+            <h3>战场记录</h3>
+            <div id="game-log-content"></div>
+        </div>
+    </div>
+
+    <!-- JS 模块（加载顺序不可调换） -->
+    <script src="js/gameState.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/ai-api.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/phases.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代号：深渊 - 弧形布局预览</title>
+    <link rel="stylesheet" href="css/curved-style.css">
+</head>
+<body>
+    <!-- 顶部信息栏 -->
+    <div class="info-bar">
+        <div class="info-left">
+            <div class="info-item">
+                <span class="label">回合：</span>
+                <span class="value">1</span>
+            </div>
+            <div class="info-item">
+                <span class="label">阶段：</span>
+                <span class="value">进攻回合</span>
+            </div>
+            <div class="info-item">
+                <span class="label">玩家：</span>
+                <span class="value">极光署</span>
+            </div>
+        </div>
+        <div class="info-right">
+            <div class="info-item">
+                <span class="label">状态：</span>
+                <span class="value">游戏进行中</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏主容器 -->
+    <div class="game-container">
+        <!-- 玩家1卡牌区域（上方） -->
+        <div class="player1-cards">
+            <div class="cards-arc">
+                <!-- 玩家1卡牌 -->
+                <div class="card unknown" data-card-id="1">?</div>
+                <div class="card doctor" data-card-id="2">重组师</div>
+                <div class="card unknown" data-card-id="3">?</div>
+                <div class="card killer" data-card-id="4">清除者</div>
+                <div class="card unknown" data-card-id="5">?</div>
+                <div class="card guard" data-card-id="6">护盾官</div>
+                <div class="card unknown" data-card-id="7">?</div>
+                <div class="card normal" data-card-id="8">研究员</div>
+                <div class="card unknown" data-card-id="9">?</div>
+                <div class="card hunter" data-card-id="10">追踪者</div>
+                <div class="card unknown" data-card-id="11">?</div>
+                <div class="card prophet" data-card-id="12">先知</div>
+            </div>
+        </div>
+
+        <!-- 玩家2卡牌区域（下方） -->
+        <div class="player2-cards">
+            <div class="cards-arc">
+                <!-- 玩家2卡牌 -->
+                <div class="card killer" data-card-id="1">清除者</div>
+                <div class="card normal" data-card-id="2">研究员</div>
+                <div class="card doctor guarded" data-card-id="3">重组师</div>
+                <div class="card killer" data-card-id="4">清除者</div>
+                <div class="card normal" data-card-id="5">研究员</div>
+                <div class="card guard" data-card-id="6">护盾官</div>
+                <div class="card killer" data-card-id="7">清除者</div>
+                <div class="card normal" data-card-id="8">研究员</div>
+                <div class="card hunter" data-card-id="9">追踪者</div>
+                <div class="card killer" data-card-id="10">清除者</div>
+                <div class="card normal" data-card-id="11">研究员</div>
+                <div class="card prophet" data-card-id="12">先知</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 交互面板 -->
+    <div class="interaction-panel">
+        <h2>深渊网正在思考进攻策略...</h2>
+        <div class="interaction-content">
+            <p>请选择要攻击的目标卡牌</p>
+            <p style="margin-top: 20px;">
+                <button class="btn btn-primary">确认</button>
+                <button class="btn btn-secondary">取消</button>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 模拟卡牌点击效果
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (!this.classList.contains('eliminated')) {
+                    this.style.transform = 'translateY(-15px) scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
