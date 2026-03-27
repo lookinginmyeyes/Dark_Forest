@@ -1,7 +1,10 @@
 // 调用文明·智域AI服务
 async function callAI(action, data) {
     try {
-        const response = await fetch('/api/ai-action', {
+        const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost')
+        ? 'http://localhost:3001'
+        : '';
+        const response = await fetch(API_BASE + '/api/ai-action', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action, data, mode: gameState.aiMode })
