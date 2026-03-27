@@ -715,7 +715,9 @@ async function aiSelectGuardTarget() {
 function toggleAIMode() {
     gameState.aiMode = gameState.aiMode === 'normal' ? 'fast' : 'normal';
     const button = document.getElementById('toggle-ai-mode');
-    button.textContent = gameState.aiMode === 'normal' ? '极速模式' : '推理模式';
-    showInteractionMessage(`AI模式已切换为${gameState.aiMode === 'normal' ? '推理模式' : '极速模式'}！`);
+    // 按钮文案显示“当前模式”，而不是“下一次点击要切到的模式”
+    const modeLabel = gameState.aiMode === 'normal' ? '推理模式' : '极速模式';
+    button.textContent = modeLabel;
+    showInteractionMessage(`AI模式已切换为${modeLabel}！`);
 }
 
