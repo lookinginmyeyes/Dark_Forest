@@ -1,6 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "echo ok",
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@3"
+    }
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
   ]
