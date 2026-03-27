@@ -60,9 +60,6 @@ const FAST_BASE_URL = process.env.FAST_BASE_URL;
 const FAST_AUTH_TOKEN = process.env.FAST_AUTH_TOKEN;
 const MODEL_FAST = process.env.AI_MODEL_FAST || 'DeepSeek-R1-Distill-Qwen-7B';
 
-// Node.js 18以下没有内置fetch，需要引入
-const nodeFetch = globalThis.fetch || require('node-fetch');
-
 function cardName(type) {
     return { killer:'清除者', normal:'研究员', doctor:'重组师', guard:'护盾官', hunter:'失控·001', prophet:'先知' }[type] || '未知';
 }
@@ -113,7 +110,6 @@ module.exports = async function handler(req, res) {
     if (!req.body) return res.status(400).json({ error: 'missing body' });
     const { action, data, mode } = req.body;
     if (!action || !data) return res.status(400).json({ error: 'missing action or data' });
-    if (!BASE_URL || !API_KEY) return res.status(500).json({ error: 'env vars not configured: DOUBAO_BASE_URL or DOUBAO_AUTH_TOKEN missing' });
 
     const userMessage = buildMessage(action, data);
 
@@ -129,10 +125,22 @@ module.exports = async function handler(req, res) {
             selectedKey = API_KEY;
             selectedModel = MODEL;
         }
+
+        if (!selectedURL || !selectedKey) {
+            const missing = [];
+            if (mode === 'fast') {
+                if (!FAST_BASE_URL) missing.push('FAST_BASE_URL');
+                if (!FAST_AUTH_TOKEN) missing.push('FAST_AUTH_TOKEN');
+            } else {
+                if (!BASE_URL) missing.push('DOUBAO_BASE_URL');
+                if (!API_KEY) missing.push('DOUBAO_AUTH_TOKEN');
+            }
+            return res.status(500).json({ error: `env vars not configured: missing ${missing.join(', ')}` });
+        }
         
         console.log('Using API:', selectedURL);
         console.log('Using Model:', selectedModel);
-        console.log('Using Key:', selectedKey.substring(0, 10) + '...');
+        console.log('Using Key:', String(selectedKey).slice(0, 10) + '...');
         console.log('Request Body:', JSON.stringify({
             model: selectedModel,
             max_tokens: 100,
@@ -144,7 +152,8 @@ module.exports = async function handler(req, res) {
         
         // 两种模式都使用 OpenAI 兼容格式
         // 极速模式使用推理模型（DeepSeek-R1系列），推理token会占用max_tokens，需要更大的配额
-        const maxTokens = mode === 'fast' ? 8000 : 4000;
+        // Serverless 环境更容易超时/限额，先保守一点
+        const maxTokens = mode === 'fast' ? 4096 : 2048;
         const requestBody = {
             model: selectedModel,
             max_tokens: maxTokens,
@@ -158,7 +167,7 @@ module.exports = async function handler(req, res) {
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const response = await nodeFetch(selectedURL, {
+        const response = await fetch(selectedURL, {
             method: 'POST',
             signal: controller.signal,
             headers: {
@@ -167,6 +176,7 @@ module.exports = async function handler(req, res) {
             },
             body: JSON.stringify(requestBody)
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             const errText = await response.text();
@@ -178,7 +188,6 @@ module.exports = async function handler(req, res) {
         }
 
         const json = await response.json();
-        clearTimeout(timeoutId);
         const msg = json.choices?.[0]?.message || {};
         // DeepSeek R1 系列把思考过程放在 reasoning_content，最终答案在 content
         // 若 content 为空则回退到 reasoning_content
@@ -256,4 +265,4 @@ module.exports = async function handler(req, res) {
         const fallback = data.availableTargets[Math.floor(Math.random() * data.availableTargets.length)];
         res.json({ cardIndex: fallback, thinking: 'AI决策无效，使用随机兜底策略' });
     }
-});
+};
