@@ -60,6 +60,9 @@ const FAST_BASE_URL = process.env.FAST_BASE_URL;
 const FAST_AUTH_TOKEN = process.env.FAST_AUTH_TOKEN;
 const MODEL_FAST = process.env.AI_MODEL_FAST || 'DeepSeek-R1-Distill-Qwen-7B';
 
+// Node.js 18以下没有内置fetch，需要引入
+const nodeFetch = globalThis.fetch || require('node-fetch');
+
 function cardName(type) {
     return { killer:'清除者', normal:'研究员', doctor:'重组师', guard:'护盾官', hunter:'失控·001', prophet:'先知' }[type] || '未知';
 }
@@ -155,7 +158,7 @@ module.exports = async function handler(req, res) {
         
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const response = await fetch(selectedURL, {
+        const response = await nodeFetch(selectedURL, {
             method: 'POST',
             signal: controller.signal,
             headers: {
